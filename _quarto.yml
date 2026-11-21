@@ -8,7 +8,7 @@ project:
 
 website:
   title: "Investment Research Lab"
-  description: "Investment research essays by Le Tri Nhan"
+  description: "Personal essays, projects, and works in investment research by Le Tri Nhan"
   site-url: https://letrinhandn.github.io/investment-research-lab/
   repo-url: https://github.com/letrinhandn/investment-research-lab
   favicon: styles/favicon.svg
