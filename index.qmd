@@ -1,6 +1,6 @@
 ---
 title: "Investment Research Lab"
-subtitle: "Investment research essays from the private vault"
+subtitle: "Investment research essays from the vault"
 listing:
   contents:
     - posts/*/index.qmd

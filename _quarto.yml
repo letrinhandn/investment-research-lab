@@ -9,8 +9,8 @@ project:
 website:
   title: "Investment Research Lab"
   description: "Investment research essays by Le Tri Nhan"
-  site-url: https://letrinhandn.github.io/investment-research-lab
-  repo-url: https://github.com/letrinhandn/investment-research-lab
+  site-url: https://letrinhandn.github.io/investment-research-lab/
+  repo-url: https://letrinhandn.github.io/investment-research-lab/
   repo-actions: [source, issue]
   favicon: styles/favicon.svg
   navbar:
@@ -26,14 +26,14 @@ website:
           - text: Quant Theory Lab
             href: https://letrinhandn.github.io/quant-theory-lab/
           - text: Investment Research Lab
-            href: https://github.com/letrinhandn/investment-research-lab
+            href: https://letrinhandn.github.io/investment-research-lab/
       - href: index.qmd
         text: Essays
       - href: about.qmd
         text: About
     right:
       - icon: github
-        href: https://github.com/letrinhandn/investment-research-lab
+        href: https://letrinhandn.github.io/investment-research-lab/
       - icon: twitter
         href: https://x.com/comrade_lenhan
   page-footer:
@@ -46,7 +46,7 @@ website:
 format:
   html:
     theme:
-      - darkly
+      - flatly
       - styles/quarto.scss
     toc: true
     toc-depth: 3
