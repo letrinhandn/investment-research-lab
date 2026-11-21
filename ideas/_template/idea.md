@@ -1,0 +1,5 @@
+# Example idea
+
+## Hook
+
+## Questions

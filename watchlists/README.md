@@ -1,3 +1,3 @@
 # Watchlists
 
-Active universes and names under review.
+Names under review. Create with `make new-watchlist NAME=slug`.

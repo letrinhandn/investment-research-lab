@@ -1,0 +1,11 @@
+# Optional metadata overlay. Filesystem discovery is source of truth.
+
+memos: []
+ideas: []
+watchlists: []
+notebooks: []
+papers: []
+posts: []
+projects: []
+data_sources: []
+datasets: []

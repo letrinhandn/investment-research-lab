@@ -2,9 +2,12 @@
 .env
 .venv/
 __pycache__/
-*.pyc
+*.py[cod]
 .ipynb_checkpoints/
 .pytest_cache/
 .ruff_cache/
-artifacts/
-data/raw/
+artifacts/**
+!artifacts/.gitkeep
+*.parquet
+*.feather
+.python-version

@@ -1,0 +1,42 @@
+[project]
+name = "investment-research-lab"
+version = "0.1.0"
+description = "Investment Research Lab — infinite knowledge vault for investment research"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+license = { text = "MIT" }
+dependencies = [
+    "irl-core",
+    "irl-lab",
+]
+
+[tool.uv.workspace]
+members = [
+    "packages/irl-core",
+    "packages/irl-lab",
+]
+
+[tool.uv.sources]
+irl-core = { workspace = true }
+irl-lab = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.8",
+    "jupyter>=1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["packages"]
+pythonpath = [
+    "packages/irl-core/src",
+    "packages/irl-lab/src",
+]

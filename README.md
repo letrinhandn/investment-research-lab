@@ -1,37 +1,66 @@
 # Investment Research Lab
 
-Private lab for investment research: memos, idea tracking, and watchlists.
+Infinite knowledge vault for **investment research**.
 
-Author: Le Tri Nhan
+Memos, ideas, watchlists, Jupyter analysis, academic papers, Substack essays, data sources, curated datasets, and research projects. Scale by adding plugins. No hard limit.
 
-## Scope
+Author: Le Tri Nhan  
+Visibility: private
 
-- Investment theses and research memos
-- Idea pipeline and watchlists
-- Notes that support personal capital allocation decisions
+## Mental model
 
-This repo is research and process. Theory notebooks live in Quant Theory Lab. Live order generation and brokerage wiring stay in the trading production stack.
+```
+MEMOS / IDEAS / WATCHLISTS     NOTEBOOKS / PAPERS / POSTS     DATA / DATASETS / PROJECTS
+decision pipeline              writing and analysis           evidence layer
+```
+
+## Quick start
+
+```bash
+make setup
+cp .env.example .env
+make doctor
+make list
+```
+
+### Add knowledge
+
+```bash
+make new-memo NAME=2026-11-vn-banks DOMAIN=vietnam
+make new-idea NAME=stablecoin-float DOMAIN=crypto
+make new-watchlist NAME=vn30-core DOMAIN=equities
+make new-notebook NAME=earnings-quality DOMAIN=equities
+make new-paper NAME=local-markets-note DOMAIN=vietnam
+make new-post NAME=position-sizing DOMAIN=general
+make new-project NAME=factor-screen DOMAIN=equities
+make new-data NAME=macro-fred DOMAIN=macro
+make new-dataset NAME=vn-bank-panel DOMAIN=vietnam
+```
 
 ## Layout
 
 ```text
-memos/        Dated investment memos
-ideas/        Idea cards and open questions
-watchlists/   Universe and watchlist files
-docs/         Process and conventions
+memos/        Investment theses
+ideas/        Early idea cards
+watchlists/   Names under review
+notebooks/    Analysis Jupyter
+papers/       Academic writing
+posts/        Substack and essays
+projects/     Runnable research
+data/         Data source manifests
+datasets/     Curated packs
+packages/     irl-core, irl-lab
+lab/          Registry
+artifacts/    Local outputs (gitignored)
 ```
 
-## Workflow
+## Related vaults
 
-1. Capture an idea under `ideas/`.
-2. When it matures, write a memo under `memos/YYYY-MM-slug.md`.
-3. Keep active names in `watchlists/`.
-
-## Related
-
-- [Quant Theory Lab](https://github.com/letrinhandn/quant-theory-lab): pricing theory and notebooks
-- [Terminal Trade](https://github.com/letrinhandn/Terminal-Trade): market research terminal
+- [Quant Theory Lab](https://github.com/letrinhandn/quant-theory-lab)
+- [Terminal Trade](https://github.com/letrinhandn/Terminal-Trade)
 
 ## License
 
 MIT. Private research. Not investment advice.
+
+> AI agents: read [AGENTS.md](AGENTS.md) first.

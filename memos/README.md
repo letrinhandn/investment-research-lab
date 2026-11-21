@@ -1,3 +1,3 @@
 # Memos
 
-Investment research memos. Use `YYYY-MM-slug.md`.
+Investment theses. Create with `make new-memo NAME=YYYY-MM-slug`.
