@@ -1,5 +1,4 @@
 ---
-title: "Essays"
 listing:
   contents:
     - posts/*/index.qmd
@@ -16,9 +15,3 @@ listing:
     reading-time: "Read"
 page-layout: full
 ---
-
-Investment research from the vault.
-
-[Digital garden](https://letrinhan-site.vercel.app/)  
-[Economic Lab](https://letrinhandn.github.io/economic-lab/)  
-[Quant Theory Lab](https://letrinhandn.github.io/quant-theory-lab/)
