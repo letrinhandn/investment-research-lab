@@ -4,13 +4,16 @@ subtitle: "Investment research essays from the private vault"
 listing:
   contents:
     - posts/*/index.qmd
-  type: default
+  type: grid
   sort: "date desc"
   categories: true
-  sort-ui: true
+  sort-ui: false
   filter-ui: true
-  fields: [date, title, reading-time, categories, description]
+  grid-columns: 1
+  grid-item-border: false
+  image-height: 220px
+  fields: [image, title, description, date, reading-time, categories]
 page-layout: full
 ---
 
-Part of the [digital garden](https://letrinhan-site.vercel.app/). Repo is private; public essays can still publish via Quarto when ready.
+Part of the [digital garden](https://letrinhan-site.vercel.app/) · [Economic Lab](https://letrinhandn.github.io/economic-lab/) · [Quant Theory Lab](https://letrinhandn.github.io/quant-theory-lab/)
