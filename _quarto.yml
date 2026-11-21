@@ -10,8 +10,7 @@ website:
   title: "Investment Research Lab"
   description: "Investment research essays by Le Tri Nhan"
   site-url: https://letrinhandn.github.io/investment-research-lab/
-  repo-url: https://letrinhandn.github.io/investment-research-lab/
-  repo-actions: [source, issue]
+  repo-url: https://github.com/letrinhandn/investment-research-lab
   favicon: styles/favicon.svg
   navbar:
     background: primary
@@ -33,13 +32,13 @@ website:
         text: About
     right:
       - icon: github
-        href: https://letrinhandn.github.io/investment-research-lab/
+        href: https://github.com/letrinhandn/investment-research-lab
       - icon: twitter
         href: https://x.com/comrade_lenhan
   page-footer:
-    left: "Le Tri Nhan · Investment Research Lab"
-    center: "[Personal site](https://letrinhan-site.vercel.app/) · [Economic Lab](https://letrinhandn.github.io/economic-lab/) · [QTL](https://letrinhandn.github.io/quant-theory-lab/)"
-    right: "Private research. Not investment advice."
+    left: "Le Tri Nhan"
+    center: "[Personal site](https://letrinhan-site.vercel.app/)  [EL](https://letrinhandn.github.io/economic-lab/)  [QTL](https://letrinhandn.github.io/quant-theory-lab/)"
+    right: "Research only"
   search: true
   draft-mode: gone
 
