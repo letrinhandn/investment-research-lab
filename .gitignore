@@ -8,6 +8,12 @@ __pycache__/
 .ruff_cache/
 artifacts/**
 !artifacts/.gitkeep
+alphas/**/evidence/equity.csv
+_site/
+.quarto/
+*_files/
 *.parquet
 *.feather
 .python-version
+
+/.quarto/

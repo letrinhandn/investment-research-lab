@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
     irl_root: str | None = None
+    qt_root: str | None = None
+    quant_trading_root: str | None = None
     fred_api_key: str | None = None
     hf_token: str | None = None
 

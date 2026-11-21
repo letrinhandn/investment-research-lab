@@ -1,0 +1,8 @@
+name: example-report
+status: draft
+domain: equities
+alpha: ""
+format: research-report
+engine: markdown
+alpha_metrics: {}
+description: Full research report for a passed alpha.

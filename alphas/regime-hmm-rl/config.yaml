@@ -1,0 +1,20 @@
+name: regime-hmm-rl
+status: pass
+domain: equities
+source: quant-trading
+source_slug: regime-hmm-rl
+run_id: 20260613T153708Z
+created_at: '2026-06-13T15:37:08.757032+00:00'
+tags:
+- hmm
+- ppo
+- steps_1000000
+notes: train→2023-12-31 eval→2024-01-01
+metrics:
+  sharpe: 0.86
+  ann_return: 0.0943
+  ann_vol: 0.109
+  max_drawdown: -0.1448
+  total_return: 0.2415
+  days: 606
+description: HMM regime detection + PPO RL allocation (dual-brain)

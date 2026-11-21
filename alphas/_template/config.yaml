@@ -1,0 +1,8 @@
+name: example-alpha
+status: candidate
+domain: equities
+source: quant-trading
+source_slug: example-alpha
+run_id: ""
+metrics: {}
+description: Imported alpha card. Set status to pass before opening a full report.

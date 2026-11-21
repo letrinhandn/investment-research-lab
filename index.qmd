@@ -1,0 +1,16 @@
+---
+title: "Investment Research Lab"
+subtitle: "Investment research essays from the private vault"
+listing:
+  contents:
+    - posts/*/index.qmd
+  type: default
+  sort: "date desc"
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  fields: [date, title, reading-time, categories, description]
+page-layout: full
+---
+
+Part of the [digital garden](https://letrinhan-site.vercel.app/). Repo is private; public essays can still publish via Quarto when ready.

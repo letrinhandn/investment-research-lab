@@ -1,0 +1,14 @@
+name: 2026-11-regime-hmm
+status: draft
+domain: equities
+description: Full report for passed alpha `regime-hmm-rl`
+alpha: regime-hmm-rl
+format: research-report
+engine: markdown
+alpha_metrics:
+  sharpe: 0.86
+  ann_return: 0.0943
+  ann_vol: 0.109
+  max_drawdown: -0.1448
+  total_return: 0.2415
+  days: 606

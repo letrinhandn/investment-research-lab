@@ -6,10 +6,11 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
-
 from irl_core.paths import repo_root
 
 PLUGIN_KINDS = (
+    "alphas",
+    "reports",
     "memos",
     "ideas",
     "watchlists",
