@@ -2,9 +2,9 @@
 title: "About"
 ---
 
-**Investment Research Lab** is Le Tri Nhan's investment research vault and Quarto essay site.
+Investment Research Lab is Le Tri Nhan's investment research vault and Quarto essay site.
 
-Same soft garden chrome as the [personal site](https://letrinhan-site.vercel.app/).
+Same garden palette as the [personal site](https://letrinhan-site.vercel.app/).
 
 - [Economic Lab](https://letrinhandn.github.io/economic-lab/)
 - [Quant Theory Lab](https://letrinhandn.github.io/quant-theory-lab/)
