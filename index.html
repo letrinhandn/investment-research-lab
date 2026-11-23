@@ -409,6 +409,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
+  /* Lives inside #quarto-header so Headroom hide/show moves navbar + ticker together */
   .lab-market-ticker {
     --ticker-bg: #2a050a;
     --ticker-fg: #d9cab3;
@@ -419,17 +420,25 @@ document.addEventListener("DOMContentLoaded", function () {
     --ticker-card: #3a070e;
     --ticker-line: rgba(217, 202, 179, 0.22);
 
-    position: fixed;
-    top: var(--lab-navbar-h);
-    left: 0;
-    right: 0;
-    z-index: 1025;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    z-index: 1;
+    width: 100%;
     height: var(--lab-ticker-h);
     overflow: hidden;
     background: var(--ticker-bg);
     border-top: 0;
     border-bottom: 1px solid var(--ticker-line);
     color: var(--ticker-fg);
+  }
+
+  #quarto-header {
+    /* Allow ticker to sit under navbar inside the same fixed/headroom shell */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   html[data-theme="light"] .lab-market-ticker {
@@ -537,10 +546,6 @@ document.addEventListener("DOMContentLoaded", function () {
     padding-top: calc(var(--lab-navbar-h) + var(--lab-ticker-h)) !important;
   }
 
-  #quarto-header {
-    top: 0 !important;
-  }
-
   .sidebar.margin-sidebar,
   .sidebar.toc-left,
   #quarto-margin-sidebar.sidebar.margin-sidebar,
@@ -577,9 +582,10 @@ document.addEventListener("DOMContentLoaded", function () {
   var FX_TO = ["EUR", "JPY", "GBP", "CNY"];
 
   function syncNavbarHeight() {
-    var header = document.getElementById("quarto-header");
-    if (!header) return;
-    var h = Math.ceil(header.getBoundingClientRect().height);
+    // Measure navbar only — ticker is a sibling inside #quarto-header
+    var nav = document.querySelector("#quarto-header .navbar");
+    if (!nav) return;
+    var h = Math.ceil(nav.getBoundingClientRect().height);
     if (h > 0) {
       document.documentElement.style.setProperty("--lab-navbar-h", h + "px");
     }
@@ -722,8 +728,9 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="lab-ticker-viewport" hidden></div>';
 
     var header = document.getElementById("quarto-header");
-    if (header && header.parentNode) {
-      header.insertAdjacentElement("afterend", bar);
+    if (header) {
+      // Inside header → Headroom translateY(-100%) hides navbar + ticker together
+      header.appendChild(bar);
     } else {
       document.body.insertBefore(bar, document.body.firstChild);
     }
@@ -732,6 +739,11 @@ document.addEventListener("DOMContentLoaded", function () {
     window.addEventListener("resize", syncNavbarHeight);
     requestAnimationFrame(syncNavbarHeight);
     setTimeout(syncNavbarHeight, 120);
+    // Headroom may have sized header before ticker mounted — nudge a reflow
+    setTimeout(function () {
+      syncNavbarHeight();
+      window.dispatchEvent(new Event("resize"));
+    }, 280);
 
     var binanceUrl =
       "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
