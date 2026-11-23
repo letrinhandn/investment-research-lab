@@ -438,7 +438,7 @@ document.addEventListener("DOMContentLoaded", function () {
     gap: 0.5rem;
     padding: 0 0.65rem;
     will-change: transform;
-    animation: lab-ticker-x 55s linear infinite;
+    animation: lab-ticker-x 70s linear infinite;
   }
 
   .lab-market-ticker:hover .lab-ticker-track {
@@ -545,14 +545,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
 <script>
 (function () {
-  var PAIRS = [
-    { symbol: "BTCUSDT", label: "BTC", source: "Binance", digits: 2 },
-    { symbol: "ETHUSDT", label: "ETH", source: "Binance", digits: 2 },
-    { symbol: "SOLUSDT", label: "SOL", source: "Binance", digits: 2 },
-    { symbol: "BNBUSDT", label: "BNB", source: "Binance", digits: 2 },
-    { symbol: "XRPUSDT", label: "XRP", source: "Binance", digits: 4 },
-    { symbol: "DOGEUSDT", label: "DOGE", source: "Binance", digits: 5 },
+  /* Mix: crypto + gold + equity ETFs (Binance stock tokens) + FX */
+  var BINANCE = [
+    { symbol: "BTCUSDT", label: "BTC", source: "Binance", digits: 2, prefix: "$" },
+    { symbol: "ETHUSDT", label: "ETH", source: "Binance", digits: 2, prefix: "$" },
+    { symbol: "SOLUSDT", label: "SOL", source: "Binance", digits: 2, prefix: "$" },
+    { symbol: "PAXGUSDT", label: "GOLD", source: "PAXG", digits: 2, prefix: "$" },
+    { symbol: "SPYBUSDT", label: "SPY", source: "Binance", digits: 2, prefix: "$" },
+    { symbol: "QQQBUSDT", label: "QQQ", source: "Binance", digits: 2, prefix: "$" },
   ];
+
+  var FX_TO = ["EUR", "JPY", "GBP", "CNY"];
 
   function syncNavbarHeight() {
     var header = document.getElementById("quarto-header");
@@ -575,10 +578,11 @@ document.addEventListener("DOMContentLoaded", function () {
     var chg = Number(row.chg);
     var cls = chg > 0.005 ? "up" : chg < -0.005 ? "down" : "flat";
     var sign = chg > 0 ? "+" : "";
+    var px = (row.prefix || "") + fmt(row.price, row.digits);
     return (
       '<article class="lab-ticker-card">' +
       '<span class="lab-ticker-sym">' + row.label + "</span>" +
-      '<span class="lab-ticker-px">$' + fmt(row.price, row.digits) + "</span>" +
+      '<span class="lab-ticker-px">' + px + "</span>" +
       '<span class="lab-ticker-from">From ' + row.source + "</span>" +
       '<span class="lab-ticker-chg ' + cls + '">' + sign + fmt(chg, 2) + "%</span>" +
       "</article>"
@@ -593,23 +597,98 @@ document.addEventListener("DOMContentLoaded", function () {
       '<div class="lab-ticker-track">' + html + html + "</div>";
   }
 
-  function withFx(rows, fx) {
-    if (!fx || !fx.rates) return rows;
-    rows.push({
-      label: "EUR/USD",
-      price: 1 / fx.rates.EUR,
-      chg: 0,
-      source: "Frankfurter",
-      digits: 4,
-    });
-    rows.push({
-      label: "USD/JPY",
-      price: fx.rates.JPY,
-      chg: 0,
-      source: "Frankfurter",
-      digits: 2,
-    });
+  function pctChg(now, prev) {
+    if (!isFinite(now) || !isFinite(prev) || prev === 0) return 0;
+    return ((now - prev) / prev) * 100;
+  }
+
+  function isoDaysAgo(n) {
+    var d = new Date();
+    d.setUTCDate(d.getUTCDate() - n);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function buildFxRows(latest, prior) {
+    if (!latest || !latest.rates) return [];
+    var lr = latest.rates;
+    var pr = (prior && prior.rates) || {};
+    var rows = [];
+
+    // Quote as conventional pairs
+    if (lr.EUR) {
+      var eurNow = 1 / lr.EUR;
+      var eurPrev = pr.EUR ? 1 / pr.EUR : NaN;
+      rows.push({
+        label: "EUR/USD",
+        price: eurNow,
+        chg: pctChg(eurNow, eurPrev),
+        source: "ECB",
+        digits: 4,
+        prefix: "",
+      });
+    }
+    if (lr.GBP) {
+      var gbpNow = 1 / lr.GBP;
+      var gbpPrev = pr.GBP ? 1 / pr.GBP : NaN;
+      rows.push({
+        label: "GBP/USD",
+        price: gbpNow,
+        chg: pctChg(gbpNow, gbpPrev),
+        source: "ECB",
+        digits: 4,
+        prefix: "",
+      });
+    }
+    if (lr.JPY) {
+      rows.push({
+        label: "USD/JPY",
+        price: lr.JPY,
+        chg: pctChg(lr.JPY, pr.JPY),
+        source: "ECB",
+        digits: 2,
+        prefix: "",
+      });
+    }
+    if (lr.CNY) {
+      rows.push({
+        label: "USD/CNY",
+        price: lr.CNY,
+        chg: pctChg(lr.CNY, pr.CNY),
+        source: "ECB",
+        digits: 3,
+        prefix: "",
+      });
+    }
     return rows;
+  }
+
+  function fetchFxPair() {
+    var to = FX_TO.join(",");
+    var latestUrl =
+      "https://api.frankfurter.app/latest?from=USD&to=" + to;
+    // ~1 trading day back; fall back further if weekend/holiday
+    var priorUrl =
+      "https://api.frankfurter.app/" + isoDaysAgo(1) + "?from=USD&to=" + to;
+
+    return Promise.all([
+      fetch(latestUrl).then(function (r) { return r.json(); }),
+      fetch(priorUrl)
+        .then(function (r) {
+          if (!r.ok) throw new Error("prior");
+          return r.json();
+        })
+        .catch(function () {
+          return fetch(
+            "https://api.frankfurter.app/" + isoDaysAgo(3) + "?from=USD&to=" + to
+          ).then(function (r) { return r.json(); });
+        }),
+    ])
+      .then(function (pair) {
+        return buildFxRows(pair[0], pair[1]);
+      })
+      .catch(function () {
+        return [];
+      });
   }
 
   function mount() {
@@ -632,29 +711,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
     syncNavbarHeight();
     window.addEventListener("resize", syncNavbarHeight);
-    // Headroom / font load can nudge header height
     requestAnimationFrame(syncNavbarHeight);
     setTimeout(syncNavbarHeight, 120);
 
     var binanceUrl =
       "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
-      encodeURIComponent(JSON.stringify(PAIRS.map(function (p) { return p.symbol; })));
+      encodeURIComponent(JSON.stringify(BINANCE.map(function (p) { return p.symbol; })));
 
     Promise.all([
       fetch(binanceUrl).then(function (r) { return r.json(); }),
-      fetch("https://api.frankfurter.app/latest?from=USD&to=EUR,JPY")
-        .then(function (r) { return r.json(); })
-        .catch(function () { return null; }),
+      fetchFxPair(),
     ])
       .then(function (out) {
         var tickers = out[0];
-        var fx = out[1];
+        var fxRows = out[1] || [];
         if (!Array.isArray(tickers)) throw new Error("bad binance payload");
 
         var bySym = {};
         tickers.forEach(function (t) { bySym[t.symbol] = t; });
 
-        var rows = PAIRS.map(function (p) {
+        var rows = BINANCE.map(function (p) {
           var t = bySym[p.symbol] || {};
           return {
             label: p.label,
@@ -662,10 +738,11 @@ document.addEventListener("DOMContentLoaded", function () {
             chg: Number(t.priceChangePercent),
             source: p.source,
             digits: p.digits,
+            prefix: p.prefix,
           };
         }).filter(function (r) { return isFinite(r.price); });
 
-        rows = withFx(rows, fx);
+        rows = rows.concat(fxRows);
         if (!rows.length) throw new Error("empty");
 
         bar.querySelector(".lab-ticker-status").hidden = true;
