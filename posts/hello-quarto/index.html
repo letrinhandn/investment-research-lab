@@ -422,6 +422,15 @@ document.addEventListener("DOMContentLoaded", function () {
     align-items: stretch;
   }
 
+  /* Mobile nav open → hide ticker under the dropdown */
+  @media (max-width: 991.98px) {
+    #quarto-header:has(#navbarCollapse.show) .lab-market-ticker {
+      display: none !important;
+      height: 0 !important;
+      border: 0 !important;
+    }
+  }
+
   html[data-theme="light"] .lab-market-ticker {
     --ticker-bg: #efe6e1;
     --ticker-fg: #5e0b15;
