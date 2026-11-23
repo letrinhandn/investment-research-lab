@@ -398,11 +398,18 @@ document.addEventListener("DOMContentLoaded", function () {
 </script>
 <style>
   :root {
+    /* Must match .navbar height in quarto.scss (logo + pad*2 + cream border) */
+    --lab-navbar-h: calc(40px + 0.55rem * 2 + 3px);
     --lab-ticker-h: 2.45rem;
   }
 
+  @media (max-width: 991.98px) {
+    :root {
+      --lab-navbar-h: calc(36px + 0.45rem * 2 + 3px);
+    }
+  }
+
   .lab-market-ticker {
-    /* Match lab chrome: deep burgundy + cream + gold */
     --ticker-bg: #2a050a;
     --ticker-fg: #d9cab3;
     --ticker-muted: rgba(217, 202, 179, 0.58);
@@ -413,13 +420,14 @@ document.addEventListener("DOMContentLoaded", function () {
     --ticker-line: rgba(217, 202, 179, 0.22);
 
     position: fixed;
-    top: var(--lab-header-offset, 6rem);
+    top: var(--lab-navbar-h);
     left: 0;
     right: 0;
     z-index: 1025;
     height: var(--lab-ticker-h);
     overflow: hidden;
     background: var(--ticker-bg);
+    border-top: 0;
     border-bottom: 1px solid var(--ticker-line);
     color: var(--ticker-fg);
   }
@@ -524,9 +532,9 @@ document.addEventListener("DOMContentLoaded", function () {
     color: var(--ticker-muted);
   }
 
-  /* Header stays at top; body + sidebars clear header + ticker */
+  /* Content clears real navbar + ticker (not the oversized lab-header-offset alone) */
   body.nav-fixed {
-    padding-top: calc(var(--lab-header-offset) + var(--lab-ticker-h)) !important;
+    padding-top: calc(var(--lab-navbar-h) + var(--lab-ticker-h)) !important;
   }
 
   #quarto-header {
@@ -537,20 +545,14 @@ document.addEventListener("DOMContentLoaded", function () {
   .sidebar.toc-left,
   #quarto-margin-sidebar.sidebar.margin-sidebar,
   #quarto-margin-sidebar {
-    top: calc(var(--lab-header-offset) + var(--lab-ticker-h)) !important;
-    max-height: calc(100vh - var(--lab-header-offset) - var(--lab-ticker-h) - 1.25rem) !important;
+    top: calc(var(--lab-navbar-h) + var(--lab-ticker-h)) !important;
+    max-height: calc(100vh - var(--lab-navbar-h) - var(--lab-ticker-h) - 1.25rem) !important;
   }
 
   #quarto-margin-sidebar .quarto-listing-category-title,
   #quarto-margin-sidebar #toc-title,
   #quarto-margin-sidebar nav[role="doc-toc"] > h2 {
-    scroll-margin-top: calc(var(--lab-header-offset) + var(--lab-ticker-h) + 0.75rem);
-  }
-
-  @media (max-width: 991.98px) {
-    .lab-market-ticker {
-      top: var(--lab-header-offset, 5.25rem);
-    }
+    scroll-margin-top: calc(var(--lab-navbar-h) + var(--lab-ticker-h) + 0.75rem);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -570,6 +572,15 @@ document.addEventListener("DOMContentLoaded", function () {
     { symbol: "XRPUSDT", label: "XRP", source: "Binance", digits: 4 },
     { symbol: "DOGEUSDT", label: "DOGE", source: "Binance", digits: 5 },
   ];
+
+  function syncNavbarHeight() {
+    var header = document.getElementById("quarto-header");
+    if (!header) return;
+    var h = Math.ceil(header.getBoundingClientRect().height);
+    if (h > 0) {
+      document.documentElement.style.setProperty("--lab-navbar-h", h + "px");
+    }
+  }
 
   function fmt(n, d) {
     if (!isFinite(n)) return "—";
@@ -638,6 +649,12 @@ document.addEventListener("DOMContentLoaded", function () {
       document.body.insertBefore(bar, document.body.firstChild);
     }
 
+    syncNavbarHeight();
+    window.addEventListener("resize", syncNavbarHeight);
+    // Headroom / font load can nudge header height
+    requestAnimationFrame(syncNavbarHeight);
+    setTimeout(syncNavbarHeight, 120);
+
     var binanceUrl =
       "https://api.binance.com/api/v3/ticker/24hr?symbols=" +
       encodeURIComponent(JSON.stringify(PAIRS.map(function (p) { return p.symbol; })));
@@ -674,6 +691,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var viewport = bar.querySelector(".lab-ticker-viewport");
         viewport.hidden = false;
         render(bar, rows);
+        syncNavbarHeight();
       })
       .catch(function () {
         bar.querySelector(".lab-ticker-status").textContent =
